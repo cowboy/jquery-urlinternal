@@ -1,0 +1,231 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en">
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <title>jQuery urlInternal - Unit Tests</title>
+
+<script type="text/javascript" src="../shared/jquery-1.3.2.js"></script>
+<script type="text/javascript" src="testrunner.js"></script>
+<link rel="stylesheet" href="testsuite.css">
+
+<script type="text/javascript" src="../jquery.ba-urlinternal.js"></script>
+<script type="text/javascript" language="javascript">
+<!--
+$(function(){ // START CLOSURE
+
+
+var domain = document.location.host.replace( /^www\./, '' ),
+  www_domain = 'www.' + domain,
+  re_domain = domain.replace( /\./g, '\\.' ),
+  is_www = /^www\./.test( document.location.host ),
+  html =
+      '<div class="i0 i1 i2 wi0 wi1 wi2"><a href="./">link</a></div>'
+    + '<div class="i0 i1 i2 wi0 wi1 wi2"><a href="../">link</a></div>'
+    + '<div class="i0 i1 i2 wi0 wi1 wi2"><a href="?test=&a=1&a=2&b=boo">link</a></div>'
+    + '<div class="i0 i1 i2 wi0 wi1 wi2"><a href="foo">link</a></div>'
+    + '<div class="i0 i1 i2 wi0 wi1 wi2"><a href="foo#test-anchor">link</a></div>'
+    + '<div class="i0 i1 i2 wi0 wi1 wi2"><a href="foo/bar.html?baz=123">link</a></div>'
+    + '<div class="i0 i1 i2 wi0 wi1 wi2"><a href="bar.html?test=&a=1&a=2&b=boo">link</a></div>'
+    + '<div class="i0 i1 i2 wi0 wi1 wi2"><a href="/foo/">link</a></div>'
+    + '<div class="i0 i1 i2 wi0 wi1 wi2"><a href="/foo/bar.html?baz=123">link</a></div>'
+    + '<div class="i0 i1 i2 wi0 wi1 wi2"><a href="/bar.html?test=&a=1&a=2&b=boo">link</a></div>'
+    
+    + '<div class="i0 i1 i2 wi0 wi1 wi2"><a href="//' + domain + '/">link</a></div>'
+    + '<div class="i0 e1 i2 wi0 wi1 wi2"><a href="//www.' + domain + '/">link</a></div>'
+    + '<div class="e0 i1 i2 we0 wi1 wi2"><a href="//foo.' + domain + '/">link</a></div>'
+    + '<div class="i0 i1 i2 wi0 wi1 wi2"><a href="http://' + domain + '/">link</a></div>'
+    + '<div class="i0 i1 i2 wi0 wi1 wi2"><a href="http://' + domain + '/foo/bar.html">link</a></div>'
+    + '<div class="i0 i1 i2 wi0 wi1 wi2"><a href="http://' + domain + '/bar.html?test=&a=1&a=2&b=boo">link</a></div>'
+    + '<div class="i0 e1 i2 wi0 wi1 wi2"><a href="http://www.' + domain + '/">link</a></div>'
+    + '<div class="i0 e1 i2 wi0 wi1 wi2"><a href="http://www.' + domain + '/foo/#test-anchor">link</a></div>'
+    + '<div class="e0 i1 i2 we0 wi1 wi2"><a href="http://foo.' + domain + '/">link</a></div>'
+    + '<div class="e0 i1 i2 we0 wi1 wi2"><a href="http://foo.' + domain + '/bar.html?test=&a=1&a=2&b=boo">link</a></div>'
+    + '<div class="e0 e1 i2 we0 we1 wi2"><a href="https://foo.' + domain + '/">link</a></div>'
+    + '<div class="e0 e1 i2 we0 we1 wi2"><a href="https://' + domain + '/">link</a></div>'
+    + '<div class="e0 e1 i2 we0 we1 wi2"><a href="https://www.' + domain + '/">link</a></div>'
+    + '<div class="e0 e1 e2 we0 we1 we2"><a href="http://bar.' + domain + '/">link</a></div>'
+    + '<div class="e0 e1 e2 we0 we1 we2"><a href="http://' + domain + ':81/">link</a></div>'
+    + '<div class="e0 e1 e2 we0 we1 we2"><a href="http://google.com/">link</a></div>'
+    + '<div class="e0 e1 e2 we0 we1 we2"><a href="http://google.com/bar.html?test=&a=1&a=2&b=boo">link</a></div>'
+    
+    + '<div class="n0 n1 n2"><a href="#test-anchor">link</a></div>'
+    + '<div class="n0 n1 n2"><a href="mailto:spam@' + domain + '">link</a></div>'
+    + '<div class="n0 n1 n2"><a href="javascript:alert(\"hello world\")">link</a></div>'
+    + '<div class="n0 n1 n2"><a href="ftp://ftp.example.com/foo/bar">link</a></div>'
+    + '<div class="n0 n1 n2"><a href="irc://irc.example.com/foo/bar">link</a></div>'
+    + '<div class="n0 n1 n2"><a href="arbitrary-scheme://example.com/foo/bar">link</a></div>'
+    + '<div class="n0 n1 n2"><a href="arbitrary-scheme:example.com/foo/bar">link</a></div>'
+    
+    + '<div class="i0 i1 i2 wi0 wi1 wi2"><form action="?mode=test" method="post">form</form></div>'
+    + '<div class="i0 i1 i2 wi0 wi1 wi2"><form action="http://' + domain + '/foo/?a=1&b=2" method="get">form</form></div>'
+    + '<div class="i0 e1 i2 wi0 wi1 wi2"><form action="http://www.' + domain + '/foo/?a=1&b=2" method="get">form</form></div>'
+    + '<div class="e0 i1 i2 we0 wi1 wi2"><form action="http://foo.' + domain + '/bar/?a=1&b=2" method="get">form</form></div>'
+    + '<div class="e0 e1 i2 we0 we1 wi2"><form action="https://' + domain + '/foo/?a=1&b=2" method="get">form</form></div>'
+    + '<div class="e0 e1 e2 we0 we1 we2"><form action="http://google.com/search?q=ben+alman" method="get">form</form></div>'
+    
+    + '<div class="i0 i1 i2 wi0 wi1 wi2"><span data-url="?mode=test">span</span></div>'
+    + '<div class="i0 i1 i2 wi0 wi1 wi2"><span data-url="http://' + domain + '/foo/?a=1&b=2">span</span></div>'
+    + '<div class="i0 e1 i2 wi0 wi1 wi2"><span data-url="http://www.' + domain + '/foo/?a=1&b=2">span</span></div>'
+    + '<div class="e0 i1 i2 we0 wi1 wi2"><span data-url="http://foo.' + domain + '/bar/?a=1&b=2">span</span></div>'
+    + '<div class="e0 e1 i2 we0 we1 wi2"><span data-url="https://' + domain + '/foo/?a=1&b=2">span</span></div>'
+    + '<div class="e0 e1 e2 we0 we1 we2"><span data-url="http://google.com/search?q=ben+alman">span</span></div>',
+    
+  tests = [
+    function(){
+      $.urlInternalHost( 'www' );
+    },
+    function(){
+      if ( /^www\./.test( document.location.host ) ) {
+        $.urlInternalHost( 'foo', 'www' );
+      } else {
+        $.urlInternalHost( 'foo' );
+      }
+    },
+    function(){
+      $.urlInternalRegExp( '^(?:https?:)?//(?:(?:www|foo)\.)?' + domain + '/' );
+    }
+  ];
+
+$('#test').html( html );
+
+$.elemUrlAttr({ span: 'data-url' });
+
+function get_props( i, elem, prefix ) {
+  var child = elem.childNodes[0],
+    tag = ( child.nodeName || '' ).toLowerCase(),
+    attr = $.elemUrlAttr()[ tag ],
+    url = $(child).attr( attr ),
+    is_class = $(elem).is( '.' + (is_www ? 'w' : '') + prefix + i )
+      ? true
+      : $(elem).is( '.n' + i )
+        ? undefined
+        : false;
+  
+  return {
+    url: url,
+    is_class: is_class,
+    description: [ i, tag, attr, url ].join(', ')
+  }
+};
+
+module("isUrlInternal");
+
+test("$.isUrlInternal", function() {
+  expect( 138 );
+  
+  $.each( tests, function(i,func){
+    func();
+    
+    $('#test').children().each(function(){
+      var props = get_props( i, this, 'i' );
+      equals( $.isUrlInternal( props.url ), props.is_class, props.description );
+    });
+  });  
+});
+
+test("$.fn.urlInternal", function() {
+  expect( 3 );
+  
+  $.each( tests, function(i,func){
+    func();
+    same( $('#test *').urlInternal().length, $('#test .' + (is_www ? 'w' : '') + 'i' + i).children().length, "urlInternal elements" );
+  });
+});
+
+test(":urlInternal", function() {
+  expect( 3 );
+  
+  $.each( tests, function(i,func){
+    func();
+    same( $('#test *:urlInternal').get(), $('#test .' + (is_www ? 'w' : '') + 'i' + i).children().get(), ":urlInternal elements" );
+  });
+});
+
+module("isUrlExternal");
+
+test("$.isUrlExternal", function() {
+  expect( 138 );
+  
+  $.each( tests, function(i,func){
+    func();
+    
+    $('#test').children().each(function(){
+      var props = get_props( i, this, 'e' );
+      equals( $.isUrlExternal( props.url ), props.is_class, props.description );
+    });
+  });  
+});
+
+test("$.fn.urlExternal", function() {
+  expect( 3 );
+  
+  $.each( tests, function(i,func){
+    func();
+    same( $('#test *').urlExternal().get(), $('#test .' + (is_www ? 'w' : '') + 'e' + i).children().get(), "urlExternal elements" );
+  });
+});
+
+test(":urlExternal", function() {
+  expect( 3 );
+  
+  $.each( tests, function(i,func){
+    func();
+    same( $('#test *:urlExternal').get(), $('#test .' + (is_www ? 'w' : '') + 'e' + i).children().get(), ":urlExternal elements" );
+  });
+});
+
+module("Support methods");
+
+test("$.urlInternalRegExp", function() {
+  expect( 2 );
+  
+  $.urlInternalHost( 'www' );
+  
+  same( $.urlInternalRegExp(), new RegExp( '^(?:http:)?//(?:(?:www)\\.)?' + re_domain + '/', 'i' ) );
+  same( $.urlInternalRegExp( 'foo' ), /foo/i );
+});
+
+test("$.urlInternalHost", function() {
+  expect( 3 );
+  
+  if ( is_www ) {
+    same( $.urlInternalHost(), new RegExp( '^(?:http:)?//www\\.' + re_domain + '/', 'i' ) );
+    same( $.urlInternalHost( 'foo', 'www' ), new RegExp( '^(?:http:)?//(?:(?:foo|www)\\.)?' + re_domain + '/', 'i' ) );
+  } else {
+    same( $.urlInternalHost(), new RegExp( '^(?:http:)?//' + re_domain + '/', 'i' ) );
+    same( $.urlInternalHost( 'foo' ), new RegExp( '^(?:http:)?//(?:(?:foo)\\.)?' + re_domain + '/', 'i' ) );
+  }
+  
+  same( $.urlInternalHost( 'www' ), new RegExp( '^(?:http:)?//(?:(?:www)\\.)?' + re_domain + '/', 'i' ) );
+});
+
+
+}); // END CLOSURE
+//-->
+</script>
+<style type="text/css" title="text/css" media="screen">
+<!--
+
+h3 {
+  margin-left: 10px;
+}
+
+-->
+</style>
+</head>
+<body>
+
+<h1>jQuery urlInternal - Unit Tests (<a href="http://benalman.com/projects/jquery-bbq-plugin/">Project Home</a>)</h1>
+<h2 id="banner"></h2>
+<h2 id="userAgent"></h2>
+
+<h3>Note: these tests assume that they will be run on a host named like "domain.com" or "www.domain.com"</h3>
+
+<ol id="tests"></ol>
+<div id="main"></div>
+
+<div id="test" style="display:none;"></div>
+
+</body>
+</html>
