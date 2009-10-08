@@ -486,7 +486,10 @@ pre,
   padding: 0 1px !important;
   background: #fee0c5 !important;
   border: 1px solid #C4884F !important;
+<<<<<<< HEAD:examples/index.css
   _zoom: 1;
+=======
+>>>>>>> 63b51d0c9d7393c60b9901262fd011b6a69dd862:examples/index.css
 }
 
 .syntaxhighlighter .toolbar {

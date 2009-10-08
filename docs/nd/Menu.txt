@@ -46,7 +46,11 @@ Format: 1.4
 # --------------------------------------------------------------------------
 
 
+<<<<<<< HEAD:docs/nd/Menu.txt
 File: jQuery urlInternal: Easily test URL internal-, external or fragment-ness  (jquery.ba-urlinternal.js)
+=======
+File: jQuery urlInternal: Easily test URL internal- or external-ness  (jquery.ba-urlinternal.js)
+>>>>>>> 63b51d0c9d7393c60b9901262fd011b6a69dd862:docs/nd/Menu.txt
 
 Group: Index  {
 
