@@ -46,7 +46,7 @@ Format: 1.4
 # --------------------------------------------------------------------------
 
 
-File: jQuery urlInternal: Easily test URL internal- or external-ness  (jquery.ba-urlinternal.js)
+File: jQuery urlInternal: Easily test URL internal-, external or fragment-ness  (jquery.ba-urlinternal.js)
 
 Group: Index  {
 

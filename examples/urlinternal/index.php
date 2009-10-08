@@ -2,9 +2,9 @@
 
 include "../index.php";
 
-$shell['title3'] = "urlInternal / urlExternal";
+$shell['title3'] = "urlInternal / urlExternal / urlFragment";
 
-$shell['h2'] = 'Easily test URL internal- or external-ness.';
+$shell['h2'] = 'Easily test URL internal-, external- or fragment-ness.';
 
 // ========================================================================== //
 // SCRIPT
@@ -13,6 +13,12 @@ $shell['h2'] = 'Easily test URL internal- or external-ness.';
 ob_start();
 ?>
 $(function(){
+  var loc = document.location,
+    fragment1 = loc.href.replace( /#.*$/, '' ) + '#test-anchor',
+    fragment2 = loc.href.replace( /^https?:\/\/(?:.*?)(\/[^#]*)#?.*$/i, '$1' ) + '#test-anchor';
+  
+  $('#fragment1').attr({ href: fragment1 }).html( '<span>' + fragment1 + '</span>' );
+  $('#fragment2').attr({ href: fragment2 }).html( '<span>' + fragment2 + '</span>' );
   
   $.elemUrlAttr({ span: 'data-url' });
   
@@ -38,23 +44,31 @@ $(function(){
         });
   };
   
-  function callback() {
+  function callback_urlInternal() {
     var length = this.length;
     
-    return this.urlInternal().length === length ? '<span class="int">internal<\/span>'
-      : this.urlExternal().length === length ? '<span class="ext">external<\/span>'
-      : '<span class="non">neither<\/span>';
+    return this.urlInternal().length === length ? '<span class="int" title="This URL is internal">internal<\/span>'
+      : this.urlExternal().length === length ? '<span class="ext" title="This URL is external">external<\/span>'
+      : '<span class="non" title="This URL is neither internal nor external">non-nav<\/span>';
+  };
+  
+  function callback_urlFragment() {
+    var length = this.length;
+    
+    return this.urlFragment().length === length ? '<span class="frag" title="This URL is a fragment">fragment<\/span>'
+      : '<span class="non" title="This URL is not a fragment">non-frag<\/span>';
   };
   
   $.urlInternalHost( 'www' );
-  do_tests( 'www (1)', callback );
+  do_tests( 'www (1)', callback_urlInternal );
   
   $.urlInternalHost( 'foo' );
-  do_tests( 'foo (2)', callback );
+  do_tests( 'foo (2)', callback_urlInternal );
   
   $.urlInternalRegExp( /^(?:https?:)?\/\/(?:(?:www|foo)\.)?benalman.com\// );
-  do_tests( 'regexp (3)', callback );
+  do_tests( 'regexp (3)', callback_urlInternal );
   
+  do_tests( 'fragment (4)', callback_urlFragment );
 });
 <?
 $shell['script'] = ob_get_contents();
@@ -101,6 +115,7 @@ lt. brown: #C4884F
 
 .meta td {
   background: #ddd;
+  white-space: nowrap;
 }
 
 .int {
@@ -109,6 +124,10 @@ lt. brown: #C4884F
 
 .ext {
   color: #f00;
+}
+
+.frag {
+  color: #00f;
 }
 
 .non {
@@ -128,17 +147,25 @@ ob_start();
 ?>
 
 <p>
-  <a href="/projects/jquery-urlinternal-plugin/">jQuery urlInternal</a> allows you to test whether any URL is internal or external, using an easily configurable RegExp. Where would you use this? Here are a few basic examples, I'm sure you can come up with more:
+  <a href="/projects/jquery-urlinternal-plugin/">jQuery urlInternal</a> allows you to test whether any URL is internal or external, using an easily configurable RegExp. It can also test whether any URL is a fragment that will only change the location.hash, instead of navigating to a new page, even in IE6/7! Where would you use this? Here are a few basic examples, I'm sure you can come up with more:
 </p>
 
 <pre class="brush:js">
 // Open every external link in a new window.
 $("a:urlExternal").attr( "target", "_blank" );
 
-// Pass document query string through to all internal links and forms (see
-// jQuery BBQ at http://benalman.com/projects/jquery-bbq-plugin/ for the
-// query string methods).
+// Pass document query string through to all internal links and forms (see jQuery BBQ at
+// http://benalman.com/projects/jquery-bbq-plugin/ for the query string methods).
 $("a, form").urlInternal().querystring( $.deparam.querystring() );
+
+// Add an onclick handler to all fragment links (see jQuery BBQ for the pushState and fragment
+// methods). In most browsers, you can do $("a[href^=#]") but that won't always work in IE6/7!
+// Either make your selector more robust, or use :urlFragment!
+$("a:urlFragment").click(function(){
+  var frag = $.param.fragment( $(this).attr( 'href' ) );
+  $.bbq.pushState({ page: frag });
+  return false;
+});
 </pre>
 
 <h3>Tests</h3>
@@ -147,10 +174,13 @@ $("a, form").urlInternal().querystring( $.deparam.querystring() );
 // For each of the example spans (at the bottom), test the URL in the "data-url" attribute.
 $.elemUrlAttr({ span: 'data-url' });
 
-// .urlInternal and .urlExternal are tested for each table row, using each of these values.
+// In tests 1-3, .urlInternal and .urlExternal are tested for the item in each table row,
+// using each of these values.
 $.urlInternalHost( "www" ); // 1
 $.urlInternalHost( "foo" ); // 2
 $.urlInternalRegExp( /^(?:https?:)?\/\/(?:(?:www|foo)\.)?benalman.com\// ); // 3
+
+// In test 4, .urlFragment is tested for the item in each table rom.
 </pre>
 
 <h3>Results</h3>
@@ -168,6 +198,8 @@ $.urlInternalRegExp( /^(?:https?:)?\/\/(?:(?:www|foo)\.)?benalman.com\// ); // 3
   <tr><td><a href="/foo/">/foo/</a></td></tr>
   <tr><td><a href="/foo/bar.html?baz=123">/foo/bar.html?baz=123</a></td></tr>
   <tr><td><a href="/bar.html?test=&a=1&a=2&b=boo">/bar.html?test=&a=1&a=2&b=boo</a></td></tr>
+  <tr><td><a href="foo#test-anchor">foo#test-anchor</a></td></tr>
+  <tr><td><a href="/foo#test-anchor">/foo#test-anchor</a></td></tr>
   
   <tr class="header"><th>absolute links</th></tr>
   <tr class="meta"><td>element</td></tr>
@@ -186,12 +218,21 @@ $.urlInternalRegExp( /^(?:https?:)?\/\/(?:(?:www|foo)\.)?benalman.com\// ); // 3
   <tr><td><a href="https://www.benalman.com/">https://www.benalman.com/</a></td></tr>
   <tr><td><a href="http://bar.benalman.com/">http://bar.benalman.com/</a></td></tr>
   <tr><td><a href="http://benalman.com:81/">http://benalman.com:81/</a></td></tr>
+  <tr><td><a href="http://bar.benalman.com/#foo">http://bar.benalman.com/#foo</a></td></tr>
+  <tr><td><a href="http://benalman.com:81/#bar">http://benalman.com:81/#bar</a></td></tr>
   <tr><td><a href="http://google.com/">http://google.com/</a></td></tr>
   <tr><td><a href="http://google.com/bar.html?test=&a=1&a=2&b=boo">http://google.com/bar.html?test=&a=1&a=2&b=boo</a></td></tr>
   
-  <tr class="header"><th>non-navigating links</th></tr>
+  <tr class="header"><th>fragment links</th></tr>
   <tr class="meta"><td>element</td></tr>
   <tr><td><a href="#test-anchor">#test-anchor</a></td></tr>
+  <tr><td><a href="./#test-anchor">./#test-anchor</a></td></tr>
+  <tr><td><a href="../urlinternal/#test-anchor">../urlinternal/#test-anchor</a></td></tr>
+  <tr><td><a href="#" id="fragment1">absolute path to this page plus a fragment</a></td></tr>
+  <tr><td><a href="#" id="fragment2">/relative path to this page plus a fragment</a></td></tr>
+  
+  <tr class="header"><th>non-navigating links</th></tr>
+  <tr class="meta"><td>element</td></tr>
   <tr><td><a href="mailto:spam@benalman.com">mailto:spam@benalman.com</a></td></tr>
   <tr><td><a href="javascript:alert('hello world')">javascript:alert('hello world')</a></td></tr>
   <tr><td><a href="ftp://ftp.example.com/foo/bar">ftp://ftp.example.com/foo/bar</a></td></tr>

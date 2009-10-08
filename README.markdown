@@ -1,17 +1,11 @@
 # jQuery urlInternal #
 [http://benalman.com/projects/jquery-urlinternal-plugin/](http://benalman.com/projects/jquery-urlinternal-plugin/)
 
-Version: 1.0pre, Last updated: 10/4/2009
+Version: 1.0pre, Last updated: 10/7/2009
 
 jQuery urlInternal allows you to easily test internal- or external-ness for any relative or absolute URL. Includes element filtering methods and pseudo-selectors.
 
 Visit the [project page](http://benalman.com/projects/jquery-urlinternal-plugin/) for more information and usage examples!
-
-
-## License ##
-Copyright (c) 2009 "Cowboy" Ben Alman  
-Licensed under the MIT license  
-[http://benalman.com/about/license/](http://benalman.com/about/license/)
 
 
 ## Documentation ##
@@ -41,4 +35,10 @@ Internet Explorer 6-8, Firefox 2-3.6, Safari 3-4, Chrome, Opera 9.6-10.
 
 ## Release History ##
 
-1.0pre - (10/4/2009) Pre-Initial release
+1.0pre - (10/7/2009) Pre-Initial release
+
+
+## License ##
+Copyright (c) 2009 "Cowboy" Ben Alman  
+Licensed under the MIT license  
+[http://benalman.com/about/license/](http://benalman.com/about/license/)

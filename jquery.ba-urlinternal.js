@@ -1,5 +1,5 @@
 /*!
- * urlInternal - v1.0pre - 10/4/2009
+ * urlInternal - v1.0pre - 10/7/2009
  * http://benalman.com/projects/jquery-bbq-plugin/
  * 
  * Copyright (c) 2009 "Cowboy" Ben Alman
@@ -7,14 +7,14 @@
  * http://benalman.com/about/license/
  */
 
-// Script: jQuery urlInternal: Easily test URL internal- or external-ness
+// Script: jQuery urlInternal: Easily test URL internal-, external or fragment-ness
 // 
-// *Version: 1.0pre, Last updated: 10/4/2009*
+// *Version: 1.0pre, Last updated: 10/7/2009*
 // 
 // Project Home - http://benalman.com/projects/jquery-urlinternal-plugin/
 // GitHub       - http://github.com/cowboy/jquery-urlinternal/
 // Source       - http://github.com/cowboy/jquery-urlinternal/raw/master/jquery.ba-urlinternal.js
-// (Minified)   - http://github.com/cowboy/jquery-urlinternal/raw/master/jquery.ba-urlinternal.min.js (1.3kb)
+// (Minified)   - http://github.com/cowboy/jquery-urlinternal/raw/master/jquery.ba-urlinternal.min.js (1.7kb)
 // 
 // About: License
 // 
@@ -24,10 +24,10 @@
 // 
 // About: Examples
 // 
-// These working examples, complete with fully commented code, illustrate a few
+// This working example, complete with fully commented code, illustrates a few
 // ways in which this plugin can be used.
 // 
-// COMING SOON
+// http://benalman.com/code/projects/jquery-urlinternal/examples/urlinternal/
 // 
 // About: Support and Testing
 // 
@@ -41,7 +41,7 @@
 // 
 // About: Release History
 // 
-// 1.0pre - (10/4/2009) Pre-Initial release
+// 1.0pre - (10/7/2009) Pre-Initial release
 
 (function($){
   '$:nomunge'; // Used by YUI compressor.
@@ -50,7 +50,12 @@
   var undefined,
     TRUE = !0,
     FALSE = !1,
-    loc = document.location,
+    loc = window.location,
+    aps = Array.prototype.slice,
+    
+    matches = loc.href.match( /^((https?:\/\/.*?\/)?[^#]*)#?.*$/ ),
+    loc_fragbase = matches[1] + '#',
+    loc_hostbase = matches[2],
     
     // Method references.
     jq_elemUrlAttr,
@@ -58,6 +63,7 @@
     jq_urlInternalRegExp,
     jq_isUrlInternal,
     jq_isUrlExternal,
+    jq_isUrlFragment,
     
     // Reused strings.
     str_elemUrlAttr = 'elemUrlAttr',
@@ -65,11 +71,22 @@
     str_src = 'src',
     str_urlInternal = 'urlInternal',
     str_urlExternal = 'urlExternal',
+    str_urlFragment = 'urlFragment',
     
     url_regexp,
     
     // Used by jQuery.elemUrlAttr.
     elemUrlAttr_cache = {};
+  
+  // Why write the same function twice? Let's curry! Mmmm, curry..
+  
+  function curry( func ) {
+    var args = aps.call( arguments, 1 );
+    
+    return function() {
+      return func.apply( this, args.concat( aps.call( arguments ) ) );
+    };
+  };
   
   // Section: Methods
   // 
@@ -94,8 +111,8 @@
   
   $.isUrlInternal = jq_isUrlInternal = function( url ) {
     
-    // non-navigating: url is nonexistent
-    if ( !url ) { return undefined; }
+    // non-navigating: url is nonexistent or a fragment
+    if ( !url || jq_isUrlFragment( url ) ) { return undefined; }
     
     // internal: url is absolute-but-internal (see $.urlInternalRegExp)
     if ( url_regexp.test(url) ) { return TRUE; }
@@ -103,8 +120,8 @@
     // external: url is absolute (begins with http:// or https:// or //)
     if ( /^(?:https?:)?\/\//i.test(url) ) { return FALSE; }
     
-    // non-navigating: url begins with # or scheme:
-    if ( /^(?:#|[a-z\d.-]+:)/i.test(url) ) { return undefined; }
+    // non-navigating: url begins with scheme:
+    if ( /^[a-z\d.-]+:/i.test(url) ) { return undefined; }
     
     return TRUE;
   };
@@ -134,6 +151,50 @@
     return typeof result === 'boolean'
       ? !result
       : result;
+  };
+  
+  // Method: jQuery.isUrlFragment
+  // 
+  // Test whether or not a URL is a fragment in the context of the current page,
+  // meaning the URL can either begin with # or be a partial URL or full URI,
+  // but when it is navigated to, only the document.location.hash will change,
+  // and the page will not reload.
+  // 
+  // Usage:
+  // 
+  // > jQuery.isUrlFragment( url );
+  // 
+  // Arguments:
+  // 
+  //   url - (String) a URL to test the fragment-ness of.
+  // 
+  // Returns:
+  // 
+  //  (Boolean) true if the URL is a fragment, false otherwise.
+  
+  $.isUrlFragment = jq_isUrlFragment = function( url ) {
+    var matches = ( url || '' ).match( /^([^#]?)([^#]*#).*$/ );
+    
+    // url *might* be a fragment, since there were matches.
+    return !!matches && (
+      
+      // url is just a fragment.
+      matches[2] === '#'
+      
+      // url is absolute and contains a fragment, but is otherwise the same URI.
+      || url.indexOf( loc_fragbase ) === 0
+      
+      // url is relative, begins with '/', contains a fragment, and is otherwise
+      // the same URI.
+      || ( matches[1] === '/' ? loc_hostbase + matches[2] === loc_fragbase
+      
+      // url is relative, but doesn't begin with '/', contains a fragment, and
+      // is otherwise the same URI. This isn't even remotely efficient, but it's
+      // significantly less code than parsing everything. Besides, it will only
+      // even be tested on url values that contain '#', aren't absolute, and
+      // don't begin with '/', which is not going to be many of them.
+      : !/^https?:\/\//i.test( url ) && $('<a href="' + url + '"/>')[0].href.indexOf( loc_fragbase ) === 0 )
+    );
   };
   
   // Method: jQuery.fn.urlInternal
@@ -176,13 +237,33 @@
   // 
   //  (jQuery) A filtered jQuery collection of elements.
   
-  $.fn[str_urlInternal] = function( attr ) {
-    return this.filter( ':' + str_urlInternal + (attr ? '(' + attr + ')' : '') );
+  // Method: jQuery.fn.urlFragment
+  // 
+  // Filter a jQuery collection of elements, returning only elements that have
+  // an fragment URL (as determined by <jQuery.isUrlFragment>). If URL cannot
+  // be determined, remove the element from the collection.
+  // 
+  // Usage:
+  // 
+  // > jQuery('selector').urlFragment( [ attr ] );
+  // 
+  // Arguments:
+  // 
+  //  attr - (String) Optional name of an attribute that will contain a URL to
+  //    test external-ness against. See <jQuery.elemUrlAttr> for a list of
+  //    default attributes.
+  // 
+  // Returns:
+  // 
+  //  (jQuery) A filtered jQuery collection of elements.
+  
+  function fn_filter( str, attr ) {
+    return this.filter( ':' + str + (attr ? '(' + attr + ')' : '') );
   };
-
-  $.fn[str_urlExternal] = function( attr ) {
-    return this.filter( ':' + str_urlExternal + (attr ? '(' + attr + ')' : '') );
-  };
+  
+  $.fn[ str_urlInternal ] = curry( fn_filter, str_urlInternal );
+  $.fn[ str_urlExternal ] = curry( fn_filter, str_urlExternal );
+  $.fn[ str_urlFragment ] = curry( fn_filter, str_urlFragment );
   
   // Section: Selectors
   // 
@@ -228,21 +309,36 @@
   // 
   //  (jQuery) A filtered jQuery collection of elements.
   
-  function get_attr( match, elem ) {
-    return match[3] || jq_elemUrlAttr()[ ( elem.nodeName || '' ).toLowerCase() ] || '';
+  // Selector: :urlFragment
+  // 
+  // Filter a jQuery collection of elements, returning only elements that have
+  // an fragment URL (as determined by <jQuery.isUrlFragment>). If URL cannot
+  // be determined, remove the element from the collection.
+  // 
+  // Usage:
+  // 
+  // > jQuery('selector').filter(':urlFragment');
+  // > jQuery('selector').filter(':urlFragment(attr)');
+  // 
+  // Arguments:
+  // 
+  //  attr - (String) Optional name of an attribute that will contain a URL to
+  //    test fragment-ness against. See <jQuery.elemUrlAttr> for a list of
+  //    default attributes.
+  // 
+  // Returns:
+  // 
+  //  (jQuery) A filtered jQuery collection of elements.
+  
+  function fn_selector( func, elem, i, match ) {
+    var a = match[3] || jq_elemUrlAttr()[ ( elem.nodeName || '' ).toLowerCase() ] || '';
+    
+    return a ? !!func( elem.getAttribute( a ) ) : FALSE;
   };
   
-  $.expr[':'][str_urlInternal] = function( elem, i, match ) {
-    var a = get_attr( match, elem );
-    
-    return a ? !!jq_isUrlInternal( $(elem).attr(a) ) : FALSE;
-  };
-  
-  $.expr[':'][str_urlExternal] = function( elem, i, match ) {
-    var a = get_attr( match, elem );
-    
-    return a ? !!jq_isUrlExternal( $(elem).attr(a) ) : FALSE;
-  };
+  $.expr[':'][ str_urlInternal ] = curry( fn_selector, jq_isUrlInternal );
+  $.expr[':'][ str_urlExternal ] = curry( fn_selector, jq_isUrlExternal );
+  $.expr[':'][ str_urlFragment ] = curry( fn_selector, jq_isUrlFragment );
   
   // Section: Support methods
   // 

@@ -14,11 +14,13 @@
 <!--
 $(function(){ // START CLOSURE
 
-
-var domain = document.location.host.replace( /^www\./, '' ),
+var loc = document.location,
+  fragment1 = loc.href.replace( /#.*$/, '' ) + '#test-anchor',
+  fragment2 = loc.href.replace( /^https?:\/\/(?:.*?)(\/[^#]*)#?.*$/i, '$1' ) + '#test-anchor',
+  domain = loc.host.replace( /^www\./, '' ),
   www_domain = 'www.' + domain,
   re_domain = domain.replace( /\./g, '\\.' ),
-  is_www = /^www\./.test( document.location.host ),
+  is_www = /^www\./.test( loc.host ),
   html =
       '<div class="i0 i1 i2 wi0 wi1 wi2"><a href="./">link</a></div>'
     + '<div class="i0 i1 i2 wi0 wi1 wi2"><a href="../">link</a></div>'
@@ -49,13 +51,18 @@ var domain = document.location.host.replace( /^www\./, '' ),
     + '<div class="e0 e1 e2 we0 we1 we2"><a href="http://google.com/">link</a></div>'
     + '<div class="e0 e1 e2 we0 we1 we2"><a href="http://google.com/bar.html?test=&a=1&a=2&b=boo">link</a></div>'
     
-    + '<div class="n0 n1 n2"><a href="#test-anchor">link</a></div>'
     + '<div class="n0 n1 n2"><a href="mailto:spam@' + domain + '">link</a></div>'
     + '<div class="n0 n1 n2"><a href="javascript:alert(\"hello world\")">link</a></div>'
     + '<div class="n0 n1 n2"><a href="ftp://ftp.example.com/foo/bar">link</a></div>'
     + '<div class="n0 n1 n2"><a href="irc://irc.example.com/foo/bar">link</a></div>'
     + '<div class="n0 n1 n2"><a href="arbitrary-scheme://example.com/foo/bar">link</a></div>'
     + '<div class="n0 n1 n2"><a href="arbitrary-scheme:example.com/foo/bar">link</a></div>'
+    
+    + '<div class="n0 n1 n2 f3 wf3"><a href="#test-anchor">#test-anchor</a></div>'
+    + '<div class="n0 n1 n2 f3 wf3"><a href="./#test-anchor">./#test-anchor</a></div>'
+    + '<div class="n0 n1 n2 f3 wf3"><a href="../unit/#test-anchor">../unit/#test-anchor</a></div>'
+    + '<div class="n0 n1 n2 f3 wf3"><a href="' + fragment1 + '">' + fragment1 + '</a></div>'
+    + '<div class="n0 n1 n2 f3 wf3"><a href="' + fragment2 + '">' + fragment2 + '</a></div>'
     
     + '<div class="i0 i1 i2 wi0 wi1 wi2"><form action="?mode=test" method="post">form</form></div>'
     + '<div class="i0 i1 i2 wi0 wi1 wi2"><form action="http://' + domain + '/foo/?a=1&b=2" method="get">form</form></div>'
@@ -76,7 +83,7 @@ var domain = document.location.host.replace( /^www\./, '' ),
       $.urlInternalHost( 'www' );
     },
     function(){
-      if ( /^www\./.test( document.location.host ) ) {
+      if ( /^www\./.test( loc.host ) ) {
         $.urlInternalHost( 'foo', 'www' );
       } else {
         $.urlInternalHost( 'foo' );
@@ -112,7 +119,7 @@ function get_props( i, elem, prefix ) {
 module("isUrlInternal");
 
 test("$.isUrlInternal", function() {
-  expect( 138 );
+  expect( 150 );
   
   $.each( tests, function(i,func){
     func();
@@ -145,7 +152,7 @@ test(":urlInternal", function() {
 module("isUrlExternal");
 
 test("$.isUrlExternal", function() {
-  expect( 138 );
+  expect( 150 );
   
   $.each( tests, function(i,func){
     func();
@@ -173,6 +180,29 @@ test(":urlExternal", function() {
     func();
     same( $('#test *:urlExternal').get(), $('#test .' + (is_www ? 'w' : '') + 'e' + i).children().get(), ":urlExternal elements" );
   });
+});
+
+module("isUrlFragment");
+
+test("$.isUrlFragment", function() {
+  expect( 50 );
+  
+  $('#test').children().each(function(){
+    var props = get_props( 3, this, 'f' );
+    equals( $.isUrlFragment( props.url ), props.is_class, props.description );
+  });
+});
+
+test("$.fn.urlFragment", function() {
+  expect( 1 );
+  
+  same( $('#test *').urlFragment().get(), $('#test .f3').children().get(), "urlFragment elements" );
+});
+
+test(":urlFragment", function() {
+  expect( 1 );
+  
+  same( $('#test *:urlFragment').get(), $('#test .f3').children().get(), ":urlFragment elements" );
 });
 
 module("Support methods");
