@@ -1,5 +1,5 @@
 /*!
- * urlInternal - v1.0pre - 10/7/2009
+ * urlInternal - v1.0 - 10/7/2009
  * http://benalman.com/projects/jquery-bbq-plugin/
  * 
  * Copyright (c) 2009 "Cowboy" Ben Alman
@@ -9,7 +9,7 @@
 
 // Script: jQuery urlInternal: Easily test URL internal-, external or fragment-ness
 // 
-// *Version: 1.0pre, Last updated: 10/7/2009*
+// *Version: 1.0, Last updated: 10/7/2009*
 // 
 // Project Home - http://benalman.com/projects/jquery-urlinternal-plugin/
 // GitHub       - http://github.com/cowboy/jquery-urlinternal/
@@ -41,7 +41,7 @@
 // 
 // About: Release History
 // 
-// 1.0pre - (10/7/2009) Pre-Initial release
+// 1.0 - (10/7/2009) Initial release
 
 (function($){
   '$:nomunge'; // Used by YUI compressor.
@@ -243,6 +243,11 @@
   // an fragment URL (as determined by <jQuery.isUrlFragment>). If URL cannot
   // be determined, remove the element from the collection.
   // 
+  // Note that in most browsers, selecting $("a[href^=#]") is reliable, but this
+  // doesn't always work in IE6/7! In order to properly test whether a URL
+  // attribute's value is a fragment in the context of the current page, you can
+  // either make your selector a bit more complicated.. or use .urlFragment!
+  // 
   // Usage:
   // 
   // > jQuery('selector').urlFragment( [ attr ] );
@@ -314,6 +319,11 @@
   // Filter a jQuery collection of elements, returning only elements that have
   // an fragment URL (as determined by <jQuery.isUrlFragment>). If URL cannot
   // be determined, remove the element from the collection.
+  // 
+  // Note that in most browsers, selecting $("a[href^=#]") is reliable, but this
+  // doesn't always work in IE6/7! In order to properly test whether a URL
+  // attribute's value is a fragment in the context of the current page, you can
+  // either make your selector a bit more complicated.. or use :urlFragment!
   // 
   // Usage:
   // 

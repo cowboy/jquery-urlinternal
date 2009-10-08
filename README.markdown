@@ -1,7 +1,7 @@
 # jQuery urlInternal #
 [http://benalman.com/projects/jquery-urlinternal-plugin/](http://benalman.com/projects/jquery-urlinternal-plugin/)
 
-Version: 1.0pre, Last updated: 10/7/2009
+Version: 1.0, Last updated: 10/7/2009
 
 jQuery urlInternal allows you to easily test internal-, external-, or fragment-ness for any relative or absolute URL. Includes element filtering methods and pseudo-selectors.
 
@@ -35,7 +35,7 @@ Internet Explorer 6-8, Firefox 2-3.6, Safari 3-4, Chrome, Opera 9.6-10.
 
 ## Release History ##
 
-1.0pre - (10/7/2009) Pre-Initial release
+1.0 - (10/7/2009) Initial release
 
 
 ## License ##
