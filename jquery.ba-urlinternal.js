@@ -1,9 +1,5 @@
 /*!
-<<<<<<< HEAD:jquery.ba-urlinternal.js
  * urlInternal - v1.0pre - 10/7/2009
-=======
- * urlInternal - v1.0pre - 10/4/2009
->>>>>>> 63b51d0c9d7393c60b9901262fd011b6a69dd862:jquery.ba-urlinternal.js
  * http://benalman.com/projects/jquery-bbq-plugin/
  * 
  * Copyright (c) 2009 "Cowboy" Ben Alman
@@ -11,26 +7,14 @@
  * http://benalman.com/about/license/
  */
 
-<<<<<<< HEAD:jquery.ba-urlinternal.js
 // Script: jQuery urlInternal: Easily test URL internal-, external or fragment-ness
-=======
-// Script: jQuery urlInternal: Easily test URL internal- or external-ness
->>>>>>> 63b51d0c9d7393c60b9901262fd011b6a69dd862:jquery.ba-urlinternal.js
 // 
-<<<<<<< HEAD:jquery.ba-urlinternal.js
 // *Version: 1.0pre, Last updated: 10/7/2009*
-=======
-// *Version: 1.0pre, Last updated: 10/4/2009*
->>>>>>> 63b51d0c9d7393c60b9901262fd011b6a69dd862:jquery.ba-urlinternal.js
 // 
 // Project Home - http://benalman.com/projects/jquery-urlinternal-plugin/
 // GitHub       - http://github.com/cowboy/jquery-urlinternal/
 // Source       - http://github.com/cowboy/jquery-urlinternal/raw/master/jquery.ba-urlinternal.js
-<<<<<<< HEAD:jquery.ba-urlinternal.js
 // (Minified)   - http://github.com/cowboy/jquery-urlinternal/raw/master/jquery.ba-urlinternal.min.js (1.7kb)
-=======
-// (Minified)   - http://github.com/cowboy/jquery-urlinternal/raw/master/jquery.ba-urlinternal.min.js (1.3kb)
->>>>>>> 63b51d0c9d7393c60b9901262fd011b6a69dd862:jquery.ba-urlinternal.js
 // 
 // About: License
 // 
@@ -40,18 +24,10 @@
 // 
 // About: Examples
 // 
-<<<<<<< HEAD:jquery.ba-urlinternal.js
 // This working example, complete with fully commented code, illustrates a few
-=======
-// These working examples, complete with fully commented code, illustrate a few
->>>>>>> 63b51d0c9d7393c60b9901262fd011b6a69dd862:jquery.ba-urlinternal.js
 // ways in which this plugin can be used.
 // 
-<<<<<<< HEAD:jquery.ba-urlinternal.js
 // http://benalman.com/code/projects/jquery-urlinternal/examples/urlinternal/
-=======
-// COMING SOON
->>>>>>> 63b51d0c9d7393c60b9901262fd011b6a69dd862:jquery.ba-urlinternal.js
 // 
 // About: Support and Testing
 // 
@@ -65,11 +41,7 @@
 // 
 // About: Release History
 // 
-<<<<<<< HEAD:jquery.ba-urlinternal.js
 // 1.0pre - (10/7/2009) Pre-Initial release
-=======
-// 1.0pre - (10/4/2009) Pre-Initial release
->>>>>>> 63b51d0c9d7393c60b9901262fd011b6a69dd862:jquery.ba-urlinternal.js
 
 (function($){
   '$:nomunge'; // Used by YUI compressor.
@@ -78,16 +50,12 @@
   var undefined,
     TRUE = !0,
     FALSE = !1,
-<<<<<<< HEAD:jquery.ba-urlinternal.js
     loc = window.location,
     aps = Array.prototype.slice,
     
     matches = loc.href.match( /^((https?:\/\/.*?\/)?[^#]*)#?.*$/ ),
     loc_fragbase = matches[1] + '#',
     loc_hostbase = matches[2],
-=======
-    loc = document.location,
->>>>>>> 63b51d0c9d7393c60b9901262fd011b6a69dd862:jquery.ba-urlinternal.js
     
     // Method references.
     jq_elemUrlAttr,
@@ -95,10 +63,7 @@
     jq_urlInternalRegExp,
     jq_isUrlInternal,
     jq_isUrlExternal,
-<<<<<<< HEAD:jquery.ba-urlinternal.js
     jq_isUrlFragment,
-=======
->>>>>>> 63b51d0c9d7393c60b9901262fd011b6a69dd862:jquery.ba-urlinternal.js
     
     // Reused strings.
     str_elemUrlAttr = 'elemUrlAttr',
@@ -106,17 +71,13 @@
     str_src = 'src',
     str_urlInternal = 'urlInternal',
     str_urlExternal = 'urlExternal',
-<<<<<<< HEAD:jquery.ba-urlinternal.js
     str_urlFragment = 'urlFragment',
-=======
->>>>>>> 63b51d0c9d7393c60b9901262fd011b6a69dd862:jquery.ba-urlinternal.js
     
     url_regexp,
     
     // Used by jQuery.elemUrlAttr.
     elemUrlAttr_cache = {};
   
-<<<<<<< HEAD:jquery.ba-urlinternal.js
   // Why write the same function twice? Let's curry! Mmmm, curry..
   
   function curry( func ) {
@@ -127,8 +88,6 @@
     };
   };
   
-=======
->>>>>>> 63b51d0c9d7393c60b9901262fd011b6a69dd862:jquery.ba-urlinternal.js
   // Section: Methods
   // 
   // Method: jQuery.isUrlInternal
@@ -152,13 +111,8 @@
   
   $.isUrlInternal = jq_isUrlInternal = function( url ) {
     
-<<<<<<< HEAD:jquery.ba-urlinternal.js
     // non-navigating: url is nonexistent or a fragment
     if ( !url || jq_isUrlFragment( url ) ) { return undefined; }
-=======
-    // non-navigating: url is nonexistent
-    if ( !url ) { return undefined; }
->>>>>>> 63b51d0c9d7393c60b9901262fd011b6a69dd862:jquery.ba-urlinternal.js
     
     // internal: url is absolute-but-internal (see $.urlInternalRegExp)
     if ( url_regexp.test(url) ) { return TRUE; }
@@ -166,13 +120,8 @@
     // external: url is absolute (begins with http:// or https:// or //)
     if ( /^(?:https?:)?\/\//i.test(url) ) { return FALSE; }
     
-<<<<<<< HEAD:jquery.ba-urlinternal.js
     // non-navigating: url begins with scheme:
     if ( /^[a-z\d.-]+:/i.test(url) ) { return undefined; }
-=======
-    // non-navigating: url begins with # or scheme:
-    if ( /^(?:#|[a-z\d.-]+:)/i.test(url) ) { return undefined; }
->>>>>>> 63b51d0c9d7393c60b9901262fd011b6a69dd862:jquery.ba-urlinternal.js
     
     return TRUE;
   };
@@ -204,7 +153,6 @@
       : result;
   };
   
-<<<<<<< HEAD:jquery.ba-urlinternal.js
   // Method: jQuery.isUrlFragment
   // 
   // Test whether or not a URL is a fragment in the context of the current page,
@@ -249,8 +197,6 @@
     );
   };
   
-=======
->>>>>>> 63b51d0c9d7393c60b9901262fd011b6a69dd862:jquery.ba-urlinternal.js
   // Method: jQuery.fn.urlInternal
   // 
   // Filter a jQuery collection of elements, returning only elements that have
@@ -291,7 +237,6 @@
   // 
   //  (jQuery) A filtered jQuery collection of elements.
   
-<<<<<<< HEAD:jquery.ba-urlinternal.js
   // Method: jQuery.fn.urlFragment
   // 
   // Filter a jQuery collection of elements, returning only elements that have
@@ -314,22 +259,11 @@
   
   function fn_filter( str, attr ) {
     return this.filter( ':' + str + (attr ? '(' + attr + ')' : '') );
-=======
-  $.fn[str_urlInternal] = function( attr ) {
-    return this.filter( ':' + str_urlInternal + (attr ? '(' + attr + ')' : '') );
   };
-
-  $.fn[str_urlExternal] = function( attr ) {
-    return this.filter( ':' + str_urlExternal + (attr ? '(' + attr + ')' : '') );
->>>>>>> 63b51d0c9d7393c60b9901262fd011b6a69dd862:jquery.ba-urlinternal.js
-  };
-<<<<<<< HEAD:jquery.ba-urlinternal.js
   
   $.fn[ str_urlInternal ] = curry( fn_filter, str_urlInternal );
   $.fn[ str_urlExternal ] = curry( fn_filter, str_urlExternal );
   $.fn[ str_urlFragment ] = curry( fn_filter, str_urlFragment );
-=======
->>>>>>> 63b51d0c9d7393c60b9901262fd011b6a69dd862:jquery.ba-urlinternal.js
   
   // Section: Selectors
   // 
@@ -375,7 +309,6 @@
   // 
   //  (jQuery) A filtered jQuery collection of elements.
   
-<<<<<<< HEAD:jquery.ba-urlinternal.js
   // Selector: :urlFragment
   // 
   // Filter a jQuery collection of elements, returning only elements that have
@@ -396,38 +329,16 @@
   // Returns:
   // 
   //  (jQuery) A filtered jQuery collection of elements.
-=======
-  function get_attr( match, elem ) {
-    return match[3] || jq_elemUrlAttr()[ ( elem.nodeName || '' ).toLowerCase() ] || '';
-  };
->>>>>>> 63b51d0c9d7393c60b9901262fd011b6a69dd862:jquery.ba-urlinternal.js
   
-<<<<<<< HEAD:jquery.ba-urlinternal.js
   function fn_selector( func, elem, i, match ) {
     var a = match[3] || jq_elemUrlAttr()[ ( elem.nodeName || '' ).toLowerCase() ] || '';
-=======
-  $.expr[':'][str_urlInternal] = function( elem, i, match ) {
-    var a = get_attr( match, elem );
->>>>>>> 63b51d0c9d7393c60b9901262fd011b6a69dd862:jquery.ba-urlinternal.js
     
-<<<<<<< HEAD:jquery.ba-urlinternal.js
     return a ? !!func( elem.getAttribute( a ) ) : FALSE;
-=======
-    return a ? !!jq_isUrlInternal( $(elem).attr(a) ) : FALSE;
->>>>>>> 63b51d0c9d7393c60b9901262fd011b6a69dd862:jquery.ba-urlinternal.js
   };
   
-<<<<<<< HEAD:jquery.ba-urlinternal.js
   $.expr[':'][ str_urlInternal ] = curry( fn_selector, jq_isUrlInternal );
   $.expr[':'][ str_urlExternal ] = curry( fn_selector, jq_isUrlExternal );
   $.expr[':'][ str_urlFragment ] = curry( fn_selector, jq_isUrlFragment );
-=======
-  $.expr[':'][str_urlExternal] = function( elem, i, match ) {
-    var a = get_attr( match, elem );
-    
-    return a ? !!jq_isUrlExternal( $(elem).attr(a) ) : FALSE;
-  };
->>>>>>> 63b51d0c9d7393c60b9901262fd011b6a69dd862:jquery.ba-urlinternal.js
   
   // Section: Support methods
   // 
@@ -532,10 +443,6 @@
         + loc.hostname.replace(re, alt_hostname + '$1').replace( /\\?\./g, '\\.' )
         + (loc.port ? ':' + loc.port : '') + '/';
     
-<<<<<<< HEAD:jquery.ba-urlinternal.js
-=======
-    console.log( pattern );
->>>>>>> 63b51d0c9d7393c60b9901262fd011b6a69dd862:jquery.ba-urlinternal.js
     return jq_urlInternalRegExp( pattern );
   };
     

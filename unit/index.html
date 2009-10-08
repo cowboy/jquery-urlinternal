@@ -14,22 +14,13 @@
 <!--
 $(function(){ // START CLOSURE
 
-<<<<<<< HEAD:unit/index.html
 var loc = document.location,
   fragment1 = loc.href.replace( /#.*$/, '' ) + '#test-anchor',
   fragment2 = loc.href.replace( /^https?:\/\/(?:.*?)(\/[^#]*)#?.*$/i, '$1' ) + '#test-anchor',
   domain = loc.host.replace( /^www\./, '' ),
-=======
-
-var domain = document.location.host.replace( /^www\./, '' ),
->>>>>>> 63b51d0c9d7393c60b9901262fd011b6a69dd862:unit/index.html
   www_domain = 'www.' + domain,
   re_domain = domain.replace( /\./g, '\\.' ),
-<<<<<<< HEAD:unit/index.html
   is_www = /^www\./.test( loc.host ),
-=======
-  is_www = /^www\./.test( document.location.host ),
->>>>>>> 63b51d0c9d7393c60b9901262fd011b6a69dd862:unit/index.html
   html =
       '<div class="i0 i1 i2 wi0 wi1 wi2"><a href="./">link</a></div>'
     + '<div class="i0 i1 i2 wi0 wi1 wi2"><a href="../">link</a></div>'
@@ -60,10 +51,6 @@ var domain = document.location.host.replace( /^www\./, '' ),
     + '<div class="e0 e1 e2 we0 we1 we2"><a href="http://google.com/">link</a></div>'
     + '<div class="e0 e1 e2 we0 we1 we2"><a href="http://google.com/bar.html?test=&a=1&a=2&b=boo">link</a></div>'
     
-<<<<<<< HEAD:unit/index.html
-=======
-    + '<div class="n0 n1 n2"><a href="#test-anchor">link</a></div>'
->>>>>>> 63b51d0c9d7393c60b9901262fd011b6a69dd862:unit/index.html
     + '<div class="n0 n1 n2"><a href="mailto:spam@' + domain + '">link</a></div>'
     + '<div class="n0 n1 n2"><a href="javascript:alert(\"hello world\")">link</a></div>'
     + '<div class="n0 n1 n2"><a href="ftp://ftp.example.com/foo/bar">link</a></div>'
@@ -71,15 +58,12 @@ var domain = document.location.host.replace( /^www\./, '' ),
     + '<div class="n0 n1 n2"><a href="arbitrary-scheme://example.com/foo/bar">link</a></div>'
     + '<div class="n0 n1 n2"><a href="arbitrary-scheme:example.com/foo/bar">link</a></div>'
     
-<<<<<<< HEAD:unit/index.html
     + '<div class="n0 n1 n2 f3 wf3"><a href="#test-anchor">#test-anchor</a></div>'
     + '<div class="n0 n1 n2 f3 wf3"><a href="./#test-anchor">./#test-anchor</a></div>'
     + '<div class="n0 n1 n2 f3 wf3"><a href="../unit/#test-anchor">../unit/#test-anchor</a></div>'
     + '<div class="n0 n1 n2 f3 wf3"><a href="' + fragment1 + '">' + fragment1 + '</a></div>'
     + '<div class="n0 n1 n2 f3 wf3"><a href="' + fragment2 + '">' + fragment2 + '</a></div>'
     
-=======
->>>>>>> 63b51d0c9d7393c60b9901262fd011b6a69dd862:unit/index.html
     + '<div class="i0 i1 i2 wi0 wi1 wi2"><form action="?mode=test" method="post">form</form></div>'
     + '<div class="i0 i1 i2 wi0 wi1 wi2"><form action="http://' + domain + '/foo/?a=1&b=2" method="get">form</form></div>'
     + '<div class="i0 e1 i2 wi0 wi1 wi2"><form action="http://www.' + domain + '/foo/?a=1&b=2" method="get">form</form></div>'
@@ -99,11 +83,7 @@ var domain = document.location.host.replace( /^www\./, '' ),
       $.urlInternalHost( 'www' );
     },
     function(){
-<<<<<<< HEAD:unit/index.html
       if ( /^www\./.test( loc.host ) ) {
-=======
-      if ( /^www\./.test( document.location.host ) ) {
->>>>>>> 63b51d0c9d7393c60b9901262fd011b6a69dd862:unit/index.html
         $.urlInternalHost( 'foo', 'www' );
       } else {
         $.urlInternalHost( 'foo' );
@@ -139,11 +119,7 @@ function get_props( i, elem, prefix ) {
 module("isUrlInternal");
 
 test("$.isUrlInternal", function() {
-<<<<<<< HEAD:unit/index.html
   expect( 150 );
-=======
-  expect( 138 );
->>>>>>> 63b51d0c9d7393c60b9901262fd011b6a69dd862:unit/index.html
   
   $.each( tests, function(i,func){
     func();
@@ -176,11 +152,7 @@ test(":urlInternal", function() {
 module("isUrlExternal");
 
 test("$.isUrlExternal", function() {
-<<<<<<< HEAD:unit/index.html
   expect( 150 );
-=======
-  expect( 138 );
->>>>>>> 63b51d0c9d7393c60b9901262fd011b6a69dd862:unit/index.html
   
   $.each( tests, function(i,func){
     func();
@@ -210,7 +182,6 @@ test(":urlExternal", function() {
   });
 });
 
-<<<<<<< HEAD:unit/index.html
 module("isUrlFragment");
 
 test("$.isUrlFragment", function() {
@@ -234,8 +205,6 @@ test(":urlFragment", function() {
   same( $('#test *:urlFragment').get(), $('#test .f3').children().get(), ":urlFragment elements" );
 });
 
-=======
->>>>>>> 63b51d0c9d7393c60b9901262fd011b6a69dd862:unit/index.html
 module("Support methods");
 
 test("$.urlInternalRegExp", function() {

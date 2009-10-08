@@ -2,17 +2,9 @@
 
 include "../index.php";
 
-<<<<<<< HEAD:examples/urlinternal/index.php
 $shell['title3'] = "urlInternal / urlExternal / urlFragment";
-=======
-$shell['title3'] = "urlInternal / urlExternal";
->>>>>>> 63b51d0c9d7393c60b9901262fd011b6a69dd862:examples/urlinternal/index.php
 
-<<<<<<< HEAD:examples/urlinternal/index.php
 $shell['h2'] = 'Easily test URL internal-, external- or fragment-ness.';
-=======
-$shell['h2'] = 'Easily test URL internal- or external-ness.';
->>>>>>> 63b51d0c9d7393c60b9901262fd011b6a69dd862:examples/urlinternal/index.php
 
 // ========================================================================== //
 // SCRIPT
@@ -21,15 +13,12 @@ $shell['h2'] = 'Easily test URL internal- or external-ness.';
 ob_start();
 ?>
 $(function(){
-<<<<<<< HEAD:examples/urlinternal/index.php
   var loc = document.location,
     fragment1 = loc.href.replace( /#.*$/, '' ) + '#test-anchor',
     fragment2 = loc.href.replace( /^https?:\/\/(?:.*?)(\/[^#]*)#?.*$/i, '$1' ) + '#test-anchor';
   
   $('#fragment1').attr({ href: fragment1 }).html( '<span>' + fragment1 + '</span>' );
   $('#fragment2').attr({ href: fragment2 }).html( '<span>' + fragment2 + '</span>' );
-=======
->>>>>>> 63b51d0c9d7393c60b9901262fd011b6a69dd862:examples/urlinternal/index.php
   
   $.elemUrlAttr({ span: 'data-url' });
   
@@ -55,7 +44,6 @@ $(function(){
         });
   };
   
-<<<<<<< HEAD:examples/urlinternal/index.php
   function callback_urlInternal() {
     var length = this.length;
     
@@ -65,46 +53,22 @@ $(function(){
   };
   
   function callback_urlFragment() {
-=======
-  function callback() {
->>>>>>> 63b51d0c9d7393c60b9901262fd011b6a69dd862:examples/urlinternal/index.php
     var length = this.length;
     
-<<<<<<< HEAD:examples/urlinternal/index.php
     return this.urlFragment().length === length ? '<span class="frag" title="This URL is a fragment">fragment<\/span>'
       : '<span class="non" title="This URL is not a fragment">non-frag<\/span>';
-=======
-    return this.urlInternal().length === length ? '<span class="int">internal<\/span>'
-      : this.urlExternal().length === length ? '<span class="ext">external<\/span>'
-      : '<span class="non">neither<\/span>';
->>>>>>> 63b51d0c9d7393c60b9901262fd011b6a69dd862:examples/urlinternal/index.php
   };
   
   $.urlInternalHost( 'www' );
-<<<<<<< HEAD:examples/urlinternal/index.php
   do_tests( 'www (1)', callback_urlInternal );
-=======
-  do_tests( 'www (1)', callback );
->>>>>>> 63b51d0c9d7393c60b9901262fd011b6a69dd862:examples/urlinternal/index.php
   
   $.urlInternalHost( 'foo' );
-<<<<<<< HEAD:examples/urlinternal/index.php
   do_tests( 'foo (2)', callback_urlInternal );
-=======
-  do_tests( 'foo (2)', callback );
->>>>>>> 63b51d0c9d7393c60b9901262fd011b6a69dd862:examples/urlinternal/index.php
   
   $.urlInternalRegExp( /^(?:https?:)?\/\/(?:(?:www|foo)\.)?benalman.com\// );
-<<<<<<< HEAD:examples/urlinternal/index.php
   do_tests( 'regexp (3)', callback_urlInternal );
-=======
-  do_tests( 'regexp (3)', callback );
->>>>>>> 63b51d0c9d7393c60b9901262fd011b6a69dd862:examples/urlinternal/index.php
   
-<<<<<<< HEAD:examples/urlinternal/index.php
   do_tests( 'fragment (4)', callback_urlFragment );
-=======
->>>>>>> 63b51d0c9d7393c60b9901262fd011b6a69dd862:examples/urlinternal/index.php
 });
 <?
 $shell['script'] = ob_get_contents();
@@ -151,10 +115,7 @@ lt. brown: #C4884F
 
 .meta td {
   background: #ddd;
-<<<<<<< HEAD:examples/urlinternal/index.php
   white-space: nowrap;
-=======
->>>>>>> 63b51d0c9d7393c60b9901262fd011b6a69dd862:examples/urlinternal/index.php
 }
 
 .int {
@@ -165,13 +126,10 @@ lt. brown: #C4884F
   color: #f00;
 }
 
-<<<<<<< HEAD:examples/urlinternal/index.php
 .frag {
   color: #00f;
 }
 
-=======
->>>>>>> 63b51d0c9d7393c60b9901262fd011b6a69dd862:examples/urlinternal/index.php
 .non {
   color: #ccc;
 }
@@ -189,27 +147,16 @@ ob_start();
 ?>
 
 <p>
-<<<<<<< HEAD:examples/urlinternal/index.php
   <a href="/projects/jquery-urlinternal-plugin/">jQuery urlInternal</a> allows you to test whether any URL is internal or external, using an easily configurable RegExp. It can also test whether any URL is a fragment that will only change the location.hash, instead of navigating to a new page, even in IE6/7! Where would you use this? Here are a few basic examples, I'm sure you can come up with more:
-=======
-  <a href="/projects/jquery-urlinternal-plugin/">jQuery urlInternal</a> allows you to test whether any URL is internal or external, using an easily configurable RegExp. Where would you use this? Here are a few basic examples, I'm sure you can come up with more:
->>>>>>> 63b51d0c9d7393c60b9901262fd011b6a69dd862:examples/urlinternal/index.php
 </p>
 
 <pre class="brush:js">
 // Open every external link in a new window.
 $("a:urlExternal").attr( "target", "_blank" );
 
-<<<<<<< HEAD:examples/urlinternal/index.php
 // Pass document query string through to all internal links and forms (see jQuery BBQ at
 // http://benalman.com/projects/jquery-bbq-plugin/ for the query string methods).
-=======
-// Pass document query string through to all internal links and forms (see
-// jQuery BBQ at http://benalman.com/projects/jquery-bbq-plugin/ for the
-// query string methods).
->>>>>>> 63b51d0c9d7393c60b9901262fd011b6a69dd862:examples/urlinternal/index.php
 $("a, form").urlInternal().querystring( $.deparam.querystring() );
-<<<<<<< HEAD:examples/urlinternal/index.php
 
 // Add an onclick handler to all fragment links (see jQuery BBQ for the pushState and fragment
 // methods). In most browsers, you can do $("a[href^=#]") but that won't always work in IE6/7!
@@ -219,8 +166,6 @@ $("a:urlFragment").click(function(){
   $.bbq.pushState({ page: frag });
   return false;
 });
-=======
->>>>>>> 63b51d0c9d7393c60b9901262fd011b6a69dd862:examples/urlinternal/index.php
 </pre>
 
 <h3>Tests</h3>
@@ -229,20 +174,13 @@ $("a:urlFragment").click(function(){
 // For each of the example spans (at the bottom), test the URL in the "data-url" attribute.
 $.elemUrlAttr({ span: 'data-url' });
 
-<<<<<<< HEAD:examples/urlinternal/index.php
 // In tests 1-3, .urlInternal and .urlExternal are tested for the item in each table row,
 // using each of these values.
-=======
-// .urlInternal and .urlExternal are tested for each table row, using each of these values.
->>>>>>> 63b51d0c9d7393c60b9901262fd011b6a69dd862:examples/urlinternal/index.php
 $.urlInternalHost( "www" ); // 1
 $.urlInternalHost( "foo" ); // 2
 $.urlInternalRegExp( /^(?:https?:)?\/\/(?:(?:www|foo)\.)?benalman.com\// ); // 3
-<<<<<<< HEAD:examples/urlinternal/index.php
 
 // In test 4, .urlFragment is tested for the item in each table rom.
-=======
->>>>>>> 63b51d0c9d7393c60b9901262fd011b6a69dd862:examples/urlinternal/index.php
 </pre>
 
 <h3>Results</h3>
@@ -260,11 +198,8 @@ $.urlInternalRegExp( /^(?:https?:)?\/\/(?:(?:www|foo)\.)?benalman.com\// ); // 3
   <tr><td><a href="/foo/">/foo/</a></td></tr>
   <tr><td><a href="/foo/bar.html?baz=123">/foo/bar.html?baz=123</a></td></tr>
   <tr><td><a href="/bar.html?test=&a=1&a=2&b=boo">/bar.html?test=&a=1&a=2&b=boo</a></td></tr>
-<<<<<<< HEAD:examples/urlinternal/index.php
   <tr><td><a href="foo#test-anchor">foo#test-anchor</a></td></tr>
   <tr><td><a href="/foo#test-anchor">/foo#test-anchor</a></td></tr>
-=======
->>>>>>> 63b51d0c9d7393c60b9901262fd011b6a69dd862:examples/urlinternal/index.php
   
   <tr class="header"><th>absolute links</th></tr>
   <tr class="meta"><td>element</td></tr>
@@ -283,15 +218,11 @@ $.urlInternalRegExp( /^(?:https?:)?\/\/(?:(?:www|foo)\.)?benalman.com\// ); // 3
   <tr><td><a href="https://www.benalman.com/">https://www.benalman.com/</a></td></tr>
   <tr><td><a href="http://bar.benalman.com/">http://bar.benalman.com/</a></td></tr>
   <tr><td><a href="http://benalman.com:81/">http://benalman.com:81/</a></td></tr>
-<<<<<<< HEAD:examples/urlinternal/index.php
   <tr><td><a href="http://bar.benalman.com/#foo">http://bar.benalman.com/#foo</a></td></tr>
   <tr><td><a href="http://benalman.com:81/#bar">http://benalman.com:81/#bar</a></td></tr>
-=======
->>>>>>> 63b51d0c9d7393c60b9901262fd011b6a69dd862:examples/urlinternal/index.php
   <tr><td><a href="http://google.com/">http://google.com/</a></td></tr>
   <tr><td><a href="http://google.com/bar.html?test=&a=1&a=2&b=boo">http://google.com/bar.html?test=&a=1&a=2&b=boo</a></td></tr>
   
-<<<<<<< HEAD:examples/urlinternal/index.php
   <tr class="header"><th>fragment links</th></tr>
   <tr class="meta"><td>element</td></tr>
   <tr><td><a href="#test-anchor">#test-anchor</a></td></tr>
@@ -300,14 +231,8 @@ $.urlInternalRegExp( /^(?:https?:)?\/\/(?:(?:www|foo)\.)?benalman.com\// ); // 3
   <tr><td><a href="#" id="fragment1">absolute path to this page plus a fragment</a></td></tr>
   <tr><td><a href="#" id="fragment2">/relative path to this page plus a fragment</a></td></tr>
   
-=======
->>>>>>> 63b51d0c9d7393c60b9901262fd011b6a69dd862:examples/urlinternal/index.php
   <tr class="header"><th>non-navigating links</th></tr>
   <tr class="meta"><td>element</td></tr>
-<<<<<<< HEAD:examples/urlinternal/index.php
-=======
-  <tr><td><a href="#test-anchor">#test-anchor</a></td></tr>
->>>>>>> 63b51d0c9d7393c60b9901262fd011b6a69dd862:examples/urlinternal/index.php
   <tr><td><a href="mailto:spam@benalman.com">mailto:spam@benalman.com</a></td></tr>
   <tr><td><a href="javascript:alert('hello world')">javascript:alert('hello world')</a></td></tr>
   <tr><td><a href="ftp://ftp.example.com/foo/bar">ftp://ftp.example.com/foo/bar</a></td></tr>

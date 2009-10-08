@@ -114,8 +114,4 @@ if ( count( get_included_files() ) == 2 ) {
   draw_shell();
 }
 
-<<<<<<< HEAD:examples/index.php
 ?>
-=======
-?>
->>>>>>> 63b51d0c9d7393c60b9901262fd011b6a69dd862:examples/index.php
