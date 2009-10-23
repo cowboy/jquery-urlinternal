@@ -1,6 +1,6 @@
 /*!
  * urlInternal - v1.0 - 10/7/2009
- * http://benalman.com/projects/jquery-bbq-plugin/
+ * http://benalman.com/projects/jquery-urlinternal-plugin/
  * 
  * Copyright (c) 2009 "Cowboy" Ben Alman
  * Licensed under the MIT license
