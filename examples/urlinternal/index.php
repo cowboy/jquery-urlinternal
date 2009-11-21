@@ -145,10 +145,15 @@ ob_end_clean();
 
 ob_start();
 ?>
+<?= $shell['donate'] ?>
 
 <p>
   <a href="/projects/jquery-urlinternal-plugin/">jQuery urlInternal</a> allows you to test whether any URL is internal or external, using an easily configurable RegExp. It can also test whether any URL is a fragment that will only change the location.hash, instead of navigating to a new page, even in IE6/7! Where would you use this? Here are a few basic examples, I'm sure you can come up with more:
 </p>
+
+<h3>Some common usage examples</h3>
+
+<div class="clear"></div>
 
 <pre class="brush:js">
 // Open every external link in a new window.
