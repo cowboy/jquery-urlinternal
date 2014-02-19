@@ -16,7 +16,8 @@ $(function(){ // START CLOSURE
 
 var loc = document.location,
   fragment1 = loc.href.replace( /#.*$/, '' ) + '#test-anchor',
-  fragment2 = loc.href.replace( /^https?:\/\/(?:.*?)(\/[^#]*)#?.*$/i, '$1' ) + '#test-anchor',
+  fragment2 = loc.href.replace( /^https?:([^#]*)#?.*$/i, '$1' ) + '#test-anchor',
+  fragment3 = loc.href.replace( /^https?:\/\/(?:.*?)(\/[^#]*)#?.*$/i, '$1' ) + '#test-anchor',
   domain = loc.host.replace( /^www\./, '' ),
   www_domain = 'www.' + domain,
   re_domain = domain.replace( /\./g, '\\.' ),
@@ -63,6 +64,7 @@ var loc = document.location,
     + '<div class="n0 n1 n2 f3 wf3"><a href="../unit/#test-anchor">../unit/#test-anchor</a></div>'
     + '<div class="n0 n1 n2 f3 wf3"><a href="' + fragment1 + '">' + fragment1 + '</a></div>'
     + '<div class="n0 n1 n2 f3 wf3"><a href="' + fragment2 + '">' + fragment2 + '</a></div>'
+    + '<div class="n0 n1 n2 f3 wf3"><a href="' + fragment3 + '">' + fragment3 + '</a></div>'
     
     + '<div class="i0 i1 i2 wi0 wi1 wi2"><form action="?mode=test" method="post">form</form></div>'
     + '<div class="i0 i1 i2 wi0 wi1 wi2"><form action="http://' + domain + '/foo/?a=1&b=2" method="get">form</form></div>'
@@ -119,7 +121,7 @@ function get_props( i, elem, prefix ) {
 module("isUrlInternal");
 
 test("$.isUrlInternal", function() {
-  expect( 150 );
+  expect( 153 );
   
   $.each( tests, function(i,func){
     func();
@@ -152,7 +154,7 @@ test(":urlInternal", function() {
 module("isUrlExternal");
 
 test("$.isUrlExternal", function() {
-  expect( 150 );
+  expect( 153 );
   
   $.each( tests, function(i,func){
     func();
@@ -185,7 +187,7 @@ test(":urlExternal", function() {
 module("isUrlFragment");
 
 test("$.isUrlFragment", function() {
-  expect( 50 );
+  expect( 51 );
   
   $('#test').children().each(function(){
     var props = get_props( 3, this, 'f' );

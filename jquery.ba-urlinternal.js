@@ -56,6 +56,7 @@
     matches = loc.href.match( /^((https?:\/\/.*?\/)?[^#]*)#?.*$/ ),
     loc_fragbase = matches[1] + '#',
     loc_hostbase = matches[2],
+    loc_fragbasenoprotocol = loc_fragbase.replace( /^https?:(.*)/g, '$1' ),
     
     // Method references.
     jq_elemUrlAttr,
@@ -183,6 +184,9 @@
       
       // url is absolute and contains a fragment, but is otherwise the same URI.
       || url.indexOf( loc_fragbase ) === 0
+      
+      // url is "protocol relative" absolute and contains a fragment, but is otherwise the same URI.
+      || ( matches[0].slice(0, 2) === '//' && url.indexOf( loc_fragbasenoprotocol ) === 0 )
       
       // url is relative, begins with '/', contains a fragment, and is otherwise
       // the same URI.

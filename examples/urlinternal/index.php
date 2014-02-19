@@ -15,10 +15,12 @@ ob_start();
 $(function(){
   var loc = document.location,
     fragment1 = loc.href.replace( /#.*$/, '' ) + '#test-anchor',
-    fragment2 = loc.href.replace( /^https?:\/\/(?:.*?)(\/[^#]*)#?.*$/i, '$1' ) + '#test-anchor';
-  
+    fragment2 = loc.href.replace( /^https?:([^#]*)#?.*$/i, '$1' ) + '#test-anchor';
+    fragment3 = loc.href.replace( /^https?:\/\/(?:.*?)(\/[^#]*)#?.*$/i, '$1' ) + '#test-anchor';
+
   $('#fragment1').attr({ href: fragment1 }).html( '<span>' + fragment1 + '</span>' );
   $('#fragment2').attr({ href: fragment2 }).html( '<span>' + fragment2 + '</span>' );
+  $('#fragment3').attr({ href: fragment3 }).html( '<span>' + fragment3 + '</span>' );
   
   $.elemUrlAttr({ span: 'data-url' });
   
@@ -234,7 +236,8 @@ $.urlInternalRegExp( /^(?:https?:)?\/\/(?:(?:www|foo)\.)?benalman.com\// ); // 3
   <tr><td><a href="./#test-anchor">./#test-anchor</a></td></tr>
   <tr><td><a href="../urlinternal/#test-anchor">../urlinternal/#test-anchor</a></td></tr>
   <tr><td><a href="#" id="fragment1">absolute path to this page plus a fragment</a></td></tr>
-  <tr><td><a href="#" id="fragment2">/relative path to this page plus a fragment</a></td></tr>
+  <tr><td><a href="#" id="fragment2">protocol relative absolute path to this page plus a fragment</a></td></tr>
+  <tr><td><a href="#" id="fragment3">/relative path to this page plus a fragment</a></td></tr>
   
   <tr class="header"><th>non-navigating links</th></tr>
   <tr class="meta"><td>element</td></tr>
